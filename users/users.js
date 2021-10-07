@@ -1,49 +1,49 @@
 var MongoClient = require("mongodb").MongoClient;
-var url = "mongodb://localhost:27017/ecom";
-MongoClient.connect(url, function (err, client) {
-    if (err) throw err;
-    var myobj = [
-        { first_name: "joshua", last_name: "khair", email: "a@email.com", profile_image: "yes", role: "full stack" },
-        { first_name: "enoch", last_name: "kumar", email: "b@email.com", profile_image: "yes", role: "full stack" },
-        { first_name: "shan", last_name: "patil", email: "c@email.com", profile_image: "yes", role: "full stack" },
-        { first_name: "venkat", last_name: "pandey", email: "d@email.com", profile_image: "yes", role: "full stack" },
-        { first_name: "shan", last_name: "chaudhary", email: "e@email.com", profile_image: "yes", role: "full stack" },
-        { first_name: "iliyas", last_name: "khan", email: "f@email.com", profile_image: "yes", role: "full stack" },
-        { first_name: "desa", last_name: "shyam", email: "g@email.com", profile_image: "yes", role: "full stack" },
-    ];
-    const db = client.db("ecom");
+var url = "mongodb://localhost:27017";
+const client = new MongoClient(url);
+const dbName = "ecom";
+
+
+var data = [
+    { first_name: "joshua", last_name: "khair", email: "a@email.com", profile_image: "yes", role: "full stack" },
+    { first_name: "enoch", last_name: "kumar", email: "b@email.com", profile_image: "yes", role: "full stack" },
+    { first_name: "shan", last_name: "patil", email: "c@email.com", profile_image: "yes", role: "full stack" },
+    { first_name: "venkat", last_name: "pandey", email: "d@email.com", profile_image: "yes", role: "full stack" },
+    { first_name: "shan", last_name: "chaudhary", email: "e@email.com", profile_image: "yes", role: "full stack" },
+    { first_name: "iliyas", last_name: "khan", email: "f@email.com", profile_image: "yes", role: "full stack" },
+    { first_name: "desa", last_name: "shyam", email: "g@email.com", profile_image: "yes", role: "full stack" },
+];
+
+
+
+
+async function main() {
+    let query;
+    await client.connect();
+    console.log("Connected successfully to server");
+    const db = client.db(dbName);
 
     // create
-    db.collection("users").insertMany(myobj, function (err, res) {
-        if (err) throw err;
-        console.log("Number of records inserted: " + res.insertedCount);
+    const insertData = await db.collection("users").insertMany(data);
+    console.log(insertData.insertedCount + "record inserted");
 
-    });
-
-    // read
-    var query = { first_name: "shan" };
-    db.collection("users").find(query).toArray(function (err, result) {
-        if (err) throw err;
-        console.log(result);
-    });
+     // read
+    query = { first_name: "shan" };
+    const getusers = await db.collection("users").find(query).toArray();
+    console.log(getusers);
 
 
-    // update
-    db.collection("users").updateOne({ first_name: "shan" }, { $set: { first_name: "Saad Hasan" } }, function (err, res) {
-        if (err) throw err;
-        console.log("updated");
-
-    });
+    query = { first_name: "joshua" };
+    const updatequery = { $set: { first_name: "Ksilash" } };
+    const updateUser = await db.collection("users").updateMany(query, updatequery);
+    console.log(updateUser.modifiedCount + " record updated");
 
 
-    // delete
-    var myquery = { first_name: 'joshua' };
-    db.collection("users").deleteOne(myquery, function (err, obj) {
-        if (err) throw err;
-        console.log(obj.result + " record(s) deleted");
-        client.close();
-
-    });
-
-
-});
+    query = { first_name: "shan" };
+    const deleteUser = await db.collection("users").deleteMany(query);
+    console.log(deleteUser.deletedCount + " record deleted");
+}
+main()
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close());
