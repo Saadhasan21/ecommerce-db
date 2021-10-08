@@ -6,13 +6,13 @@ const dbName = "ecom";
 
 var data = [
 
-    {Product: "Fridge", users: "joshua khair", Product_qty: 4, base_price: 20000 ,sell_price: 25000, total_price: 100000 },
-    {Product: "Grinder", users: "enoch kumar", Product_qty: 4, base_price: 5000 ,sell_price: 5500, total_price: 22000},
-    {Product: "Oneplus", users: "shan patil", Product_qty: 1, base_price: 40000 ,sell_price: 42999, total_price: 42999 },
-    {Product: "Sony", users: "venkat pandey", Product_qty: 1, base_price: 50000 ,sell_price: 55000,total_price: 55000 },
-    {Product: "Shirt", users: "shan chaudhary", Product_qty: 2, base_price: 2000 ,sell_price: 2200,total_price: 4400  },
-    {Product: "Novel", users: "iliyas khan", Product_qty: 2, base_price: 300 ,sell_price: 450, total_price: 900},
-    {Product: "Sofa", users: "desa shyam", Product_qty: 1, base_price: 15000 ,sell_price: 18000,total_price: 18000 },
+    { Product: "Fridge", users: "joshua khair", Product_qty: 4, base_price: 20000.00, sell_price: 25000.00, total_price: 100000.00 },
+    { Product: "Grinder", users: "enoch kumar", Product_qty: 4, base_price: 5000.00, sell_price: 5500.00, total_price: 22000.00 },
+    { Product: "Oneplus", users: "shan patil", Product_qty: 1, base_price: 40000.00, sell_price: 42999.00, total_price: 42999.00 },
+    { Product: "Sony", users: "venkat pandey", Product_qty: 1, base_price: 50000.00, sell_price: 55000.00, total_price: 55000.00 },
+    { Product: "Shirt", users: "shan chaudhary", Product_qty: 2, base_price: 2000.00, sell_price: 2200.00, total_price: 4400.00 },
+    { Product: "Novel", users: "iliyas khan", Product_qty: 2, base_price: 300.00, sell_price: 450.00, total_price: 900.00 },
+    { Product: "Sofa", users: "desa shyam", Product_qty: 1, base_price: 15000.00, sell_price: 18000.00, total_price: 18000.00 }
 ];
 
 async function main() {
@@ -26,21 +26,21 @@ async function main() {
     console.log(insertData.insertedCount + "record inserted");
 
     // read
-    query = { base_price:5000};
+    query = { base_price: 5000 };
     const getCarts = await db.collection("Carts").find(query).toArray();
     console.log(getCarts);
 
     // update
-    query = { sell_price:42999 };
-    const updatequery = { $set: { sell_price:45000, total_price:45000 }};
+    query = { sell_price: 42999 };
+    const updatequery = { $set: { sell_price: 45000, total_price: 45000 } };
     const updateCarts = await db.collection("Carts").updateMany(query, updatequery);
     console.log(updateCarts.modifiedCount + " record updated");
 
     // delete
-    query = { sell_price:25000 };
+    query = { sell_price: 25000 };
     const deleteCarts = await db.collection("Carts").deleteMany(query);
     console.log(deleteCarts.deletedCount + " record deleted");
-    
+
 }
 
 main()
